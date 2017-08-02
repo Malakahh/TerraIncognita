@@ -1,4 +1,4 @@
-local ._frames = {}
+local _frames = {}
 
 local function RegisterForEvents(frame)
 	if frame == nil then return end
