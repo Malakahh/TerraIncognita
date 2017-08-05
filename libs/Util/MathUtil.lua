@@ -1,6 +1,6 @@
-local MalaMath = {}
+local MathUtil = {}
 
-function MalaMath:Clamp(val, clampMin, clampMax)
+function MathUtil.Clamp(val, clampMin, clampMax)
 	if val == nil then return end
 	clampMin = clampMin or 0
 	clampMax = clampMax or 1
@@ -14,10 +14,10 @@ function MalaMath:Clamp(val, clampMin, clampMax)
 	end
 end
 
-function MalaMath:Lerp(a, b, weight)
-	weight = self:Clamp(weight)
+function MathUtil:Lerp(a, b, weight)
+	weight = self.Clamp(weight)
 
 	return (1 - weight) * a + weight * b
 end
 
-return MalaMath
+return MathUtil
