@@ -1,44 +1,63 @@
---local events = require "libs.BetterEvents.BetterEvents"
+
+local events = require "libs.BetterEvents.BetterEvents"
 local perlin = require "libs.PerlinNoise.Perlin"
-local Img = require "libs.PseudoImg.PseudoImg"
+local map = require "MapProvider"
 
 
--- local frame = {}
--- --events.RegisterForEvents(frame)
+local frame = {}
+events.RegisterForEvents(frame)
 
--- function frame:on_player_created(event)
--- 	game.players[1].print("Terra Incognita loaded")
--- end
+script.on_init(function ()
+	perlin:init()
+end)
 
--- function frame:on_chunk_generated(event)
--- 	-- body
--- end
 
-local xMax = 64
-local yMax = 64
-local seed = 1337
-
-perlin:GenerateGradientGrid(xMax, yMax, seed)
-
-local freq = 1/32.0
-local octs = 5
-
-local noise = {}
-local x,y
-for y = 1, yMax -1 do
-	noise[y] = {}
-
-	for x = 1, xMax -1 do
-		local nx = x + 0.5
-		local ny = y + 0.5
-		--noise[y][x] = perlin:GetNoise(nx, ny)
-		-- noise[y][x] = perlin:GetNoise(nx, ny) +
-		-- 	0.5 * perlin:GetNoise(math.floor(nx / 2 + 0.5), math.floor(ny / 2 + 0.5)) +
-		-- 	0.25 * perlin:GetNoise(math.floor(nx / 4 + 0.75), math.floor(ny / 4 + 0.75))
-
-		--noise[y][x] = noise[y][x] / (1 + 0.5 + 0.25)
-		noise[y][x] = perlin:FBM(nx * freq, ny * freq, octs)
-	end
+function frame:on_player_created(event)
+	game.players[1].print("Terra Incognita loaded")
 end
 
-Img.Write("pImg.dat", xMax, yMax, noise)
+-- function frame:on_chunk_generated(event)
+-- 	local surface = event.surface
+	
+-- 	local tl = event.area.left_top
+-- 	local br = event.area.right_bottom
+
+-- 	local tiles = {}
+
+-- 	for y = tl.y, br.y do
+-- 		for x = tl.x, br.x do
+-- 			local tile = {}
+
+-- 			local val = perlin:fBm(x*freq, y*freq, 700, octs)
+
+-- 			if val < 0.35 then
+-- 				tile.name = "water"
+-- 				tile.position = {x, y}
+-- 			else
+-- 				tile.name = "grass"
+-- 				tile.position = {x, y}
+-- 			end
+
+-- 			table.insert(tiles, tile)
+-- 		end
+-- 	end
+
+-- 	surface.set_tiles(tiles, false)
+-- end
+
+function frame:on_chunk_generated(event)
+	local surface = event.surface
+
+	local tl = event.area.left_top
+	local br = event.area.right_bottom
+
+	local tiles = {}
+
+	for y = tl.y, br.y do
+		for x = tl.x, br.x do
+			table.insert(tiles, map:GetTile(x,y))
+		end
+	end
+
+	surface.set_tiles(tiles, true)
+end
