@@ -1,8 +1,9 @@
 local perlin = require "libs.PerlinNoise.Perlin"
+local blob = require "libs.Util.Blob"
 
 local mapProvider = {}
 
-Tile level settings (think water-level, etc.)
+--Tile level settings (think water-level, etc.)
 mapProvider.tileLevels = {
 	--Example
 	--{ name = "ExampleTile", level = [-1.0, 1.0] }
@@ -47,13 +48,22 @@ mapProvider.octs = 5
 mapProvider.persistance = 700
 
 function mapProvider:GetTile(x, y)
-	local val = perlin:fBm(x * mapProvider.freq, y * mapProvider.freq, mapProvider.persistance, mapProvider.octs)
+	--Sort out starting area
+	if self.startingArea == nil then
+		local b = blob:New(nil, nil, 64, 64, nil) --resolution, lerpSteps, radius, variance, windowSize
+		self.startingArea = b:Spawn(0.55)
+	end
+
+	local val
+
+	if self.startingArea[y] ~= nil and self.startingArea[y][x] ~= nil then
+		val = self.startingArea[y][x]
+	else
+		val = perlin:fBm(x * mapProvider.freq, y * mapProvider.freq, mapProvider.persistance, mapProvider.octs)
+	end
 
 	local tile = {}
 	tile.position = {x, y}
-
-	local max = #mapProvider.tileLevels
-
 	for _,v in ipairs(mapProvider.tileLevels) do
 		if val <= v.level then
 			tile.name = v.name

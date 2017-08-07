@@ -6,9 +6,9 @@ function MathUtil.Clamp(val, clampMin, clampMax)
 	clampMax = clampMax or 1
 
 	if val < clampMin then
-		x = clampMin
+		val = clampMin
 	elseif val > clampMax then
-		x = clampMax
+		val = clampMax
 	else
 		return val
 	end
@@ -17,7 +17,10 @@ end
 function MathUtil:Lerp(a, b, weight)
 	weight = self.Clamp(weight)
 
-	return (1 - weight) * a + weight * b
+	return {
+		x = (1 - weight) * a.x + weight * b.x,
+		y = (1 - weight) * a.y + weight * b.y
+	}
 end
 
 return MathUtil
