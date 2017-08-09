@@ -12,7 +12,7 @@ mapProvider.tileLevels = {
 
 
 	--{ name = "out-of-map", level = 0.0 },
-	{ name = "deepwater", level = 0.1 },
+	{ name = "deepwater", level = 0.0 },
 	--{ name = "deepwater-green", level = 0.0 },
 	{ name = "water", level = 0.35 },
 	--{ name = "water-green", level = 0.0 },
@@ -50,8 +50,15 @@ mapProvider.persistance = 700
 function mapProvider:GetTile(x, y)
 	--Sort out starting area
 	if self.startingArea == nil then
-		local b = blob:New(nil, nil, 64, 64, nil) --resolution, lerpSteps, radius, variance, windowSize
-		self.startingArea = b:Spawn(0.55)
+		local b = blob:New(
+			 --resolution, lerpSteps, radius, variance, windowSize
+			settings.global["ti-starting-area-resolution"].value,
+			settings.global["ti-starting-area-lerpsteps"].value,
+			settings.global["ti-starting-area-radius"].value,
+			settings.global["ti-starting-area-variance"].value,
+			settings.global["ti-starting-area-windowsize"].value)
+
+		self.startingArea = b:Spawn(0.55, game.players[1].position)
 	end
 
 	local val

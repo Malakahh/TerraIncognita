@@ -1,0 +1,17 @@
+data.raw.tile["out-of-map"].autoplace = nil
+data.raw.tile["deepwater"].autoplace = nil
+data.raw.tile["deepwater-green"].autoplace = nil
+--data.raw.tile["water"].autoplace = nil
+data.raw.tile["water-green"].autoplace = nil
+--data.raw.tile["grass"].autoplace = nil
+data.raw.tile["grass-medium"].autoplace = nil
+data.raw.tile["grass-dry"].autoplace = nil
+data.raw.tile["dirt"].autoplace = nil
+data.raw.tile["dirt-dark"].autoplace = nil
+data.raw.tile["sand"].autoplace = nil
+data.raw.tile["sand-dark"].autoplace = nil
+data.raw.tile["red-desert"].autoplace = nil
+data.raw.tile["red-desert-dark"].autoplace = nil
+data.raw.tile["stone-path"].autoplace = nil
+data.raw.tile["lab-dark-1"].autoplace = nil
+data.raw.tile["lab-dark-2"].autoplace = nil

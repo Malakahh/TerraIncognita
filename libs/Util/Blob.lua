@@ -71,12 +71,19 @@ local function GenerateBorderFromDots(self, dots)
 	return border
 end
 
+local function PositionBlob(self, vectors)
+	for i = 1, #vectors do
+		vectors[i].x = vectors[i].x + self.pos.x
+		vectors[i].y = vectors[i].y + self.pos.y
+	end
+end
+
 local function CalcMovingAvg(self, vectors)
 	local movAvg = {}
 
 	for i = 0, #vectors - 1 do
 		local avgDistance = 0
-		for d = -math.floor(self.windowSize / 2), math.ceil(self.windowSize / 2) do
+		for d = -math.floor(self.windowSize / 2), math.ceil(self.windowSize / 2) - 1 do
 			local v = vectors[(self.resolution + d + i) % self.resolution + 1]
 			avgDistance = avgDistance + math.sqrt(v.x ^ 2 + v.y ^ 2)
 		end
@@ -98,11 +105,14 @@ local function AdjustLength(self, v)
 		x = v.x * (self.radius + var),
 		y = v.y * (self.radius + var)
 	}
+
 	return w
 end
 
 local function GenerateVectors(self)
 	local vectors = {}
+
+	local p = game.players[1].position
 
 	for i = 0, self.resolution - 1 do
 		local val = 2 * math.pi / self.resolution * i
@@ -117,9 +127,15 @@ local function GenerateVectors(self)
 	return vectors
 end
 
-local function Spawn(self, value)
+local function Spawn(self, value, position)
+	self.pos = {
+		x = math.floor(position.x + 0.5),
+		y = math.floor(position.y + 0.5)
+	}
+
 	local vectors = GenerateVectors(self)
 	local movAvg = CalcMovingAvg(self, vectors)
+	PositionBlob(self, movAvg)
 	local border = GenerateBorderFromDots(self, movAvg)
 	local rasterizedBorders = RasterizeBorders(border)
 
@@ -134,25 +150,26 @@ local function Spawn(self, value)
 	end
 
 	local blobTempVal = "blobTempVal"
-	local halfSize = self.radius + self.variance
+	local halfWidth = self.radius + self.variance + math.abs(self.pos.x)
+	local halfHeight = self.radius + self.variance + math.abs(self.pos.y)
 
-	for y = -halfSize, halfSize do
+	for y = -halfHeight, halfHeight do
 		if data[y] == nil then
 			data[y] = {}
 		end
 
-		for x = -halfSize, halfSize do
+		for x = -halfWidth, halfWidth do
 			if data[y][x] == nil then
 				data[y][x] = blobTempVal
 			end
 		end
 	end
 
-	FloodFill(data, 0, 0, blobTempVal, value)
+	FloodFill(data, self.pos.x, self.pos.y, blobTempVal, value)
 
 	--Cleanup
-	for y = -halfSize, halfSize do
-		for x = -halfSize, halfSize do
+	for y = -halfHeight, halfHeight do
+		for x = -halfWidth, halfWidth do
 			if data[y][x] == blobTempVal then
 				data[y][x] = nil
 			end
@@ -167,10 +184,10 @@ function frame:New(resolution, lerpSteps, radius, variance, windowSize)
 
 	--Settings
 	blob.resolution = resolution or 96
-	blob.lerpSteps = lerpSteps or 200
-	blob.radius = radius or 128
-	blob.variance = variance or 128
-	blob.windowSize = windowSize or 6
+	blob.lerpSteps = lerpSteps or 256
+	blob.radius = radius or 100
+	blob.variance = variance or 100
+	blob.windowSize = windowSize or 15
 
 
 	blob.rng = game.create_random_generator()
