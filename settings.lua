@@ -1,5 +1,4 @@
 data:extend({
-    --resolution, lerpSteps, radius, variance, windowSize
     {
         type = "int-setting",
         name = "ti-starting-area-resolution",
@@ -45,6 +44,31 @@ data:extend({
         maximum_value = 1000,
         order = "sa-06"
     },
-
-
-    })  
+    {
+        type = "int-setting",
+        name = "ti-noise-period",
+        setting_type = "runtime-global",
+        default_value = 128,
+        minimum_value = 1,
+        maximum_value = 1000,
+        order = "n-01",
+    },
+    {
+        type = "int-setting",
+        name = "ti-noise-octaves",
+        setting_type = "runtime-global",
+        default_value = 5,
+        minimum_value = 1,
+        maximum_value = 8,
+        order = "n-02",
+    },
+    {
+        type = "int-setting",
+        name = "ti-noise-persistance",
+        setting_type = "runtime-global",
+        default_value = 700,
+        minimum_value = 100,
+        maximum_value = 100000,
+        order = "n-03",
+    },
+})
