@@ -64,11 +64,11 @@ data:extend({
     },
     {
         type = "int-setting",
-        name = "ti-noise-persistance",
+        name = "ti-noise-persistence",
         setting_type = "runtime-global",
-        default_value = 700,
-        minimum_value = 100,
-        maximum_value = 100000,
+        default_value = 150,
+        minimum_value = 1,
+        maximum_value = 1000,
         order = "n-03",
     },
 })

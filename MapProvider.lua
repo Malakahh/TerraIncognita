@@ -45,7 +45,7 @@ end
 
 mapProvider.freq = 1 / settings.global["ti-noise-period"].value
 mapProvider.octs = settings.global["ti-noise-octaves"].value
-mapProvider.persistance = 50
+mapProvider.persistance = settings.global["ti-noise-persistence"].value
 
 function mapProvider:GetTile(x, y)
 	--Sort out starting area
