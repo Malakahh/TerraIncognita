@@ -1,5 +1,8 @@
 local perlin = {}
 
+--Based on:
+--https://stackoverflow.com/questions/42464762/how-to-generate-tiling-perlin-noise-in-lua
+
 perlin.size = 2097152
 
 function perlin:init()

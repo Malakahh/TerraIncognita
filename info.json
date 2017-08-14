@@ -4,5 +4,6 @@
 	"title": "Terra Incognita",
 	"author": "Malakahh",
 	"description": "Custom World Generation",
-	"factorio_version": "0.15"
+	"factorio_version": "0.15",
+	"dependencies": [ "? rso-mod>=3.3.9"]
 }
